@@ -12,7 +12,7 @@ from matplotlib import pyplot as plt
 from keras.src.regularizers import l2
 from keras.src.utils import to_categorical
 from sklearn.preprocessing import LabelEncoder
-from keras.src.layers import BatchNormalization
+from keras.src.layers import BatchNormalization, Dropout
 
 
 def split_array(arr):
@@ -82,19 +82,19 @@ class Model:
     def create_model(self, x_train, num_class):
         self.model = Sequential()
         self.model.add(BatchNormalization())
-        self.model.add(Dense(256, input_shape=x_train[0].shape, activation='relu', kernel_regularizer=l2(1e-4)))
+        self.model.add(Dense(256, input_shape=x_train[0].shape, activation='tanh', kernel_regularizer=l2(1e-4)))
         self.model.add(BatchNormalization())
-        self.model.add(Dense(256, activation='relu', kernel_regularizer=l2(1e-4)))
+        self.model.add(Dense(256, activation='tanh', kernel_regularizer=l2(1e-4)))
         self.model.add(BatchNormalization())
-        self.model.add(Dense(128, activation='relu', kernel_regularizer=l2(1e-4)))
+        self.model.add(Dense(128, activation='tanh', kernel_regularizer=l2(1e-4)))
+        self.model.add(Dropout(0.2))
+        self.model.add(Dense(64, activation='tanh', kernel_regularizer=l2(1e-4)))
         self.model.add(BatchNormalization())
-        self.model.add(Dense(64, activation='relu', kernel_regularizer=l2(1e-4)))
+        self.model.add(Dense(64, activation='tanh', kernel_regularizer=l2(1e-4)))
         self.model.add(BatchNormalization())
-        self.model.add(Dense(64, activation='relu', kernel_regularizer=l2(1e-4)))
+        self.model.add(Dense(32, activation='tanh', kernel_regularizer=l2(1e-4)))
         self.model.add(BatchNormalization())
-        self.model.add(Dense(32, activation='relu', kernel_regularizer=l2(1e-4)))
-        self.model.add(BatchNormalization())
-        self.model.add(Dense(32, activation='relu', kernel_regularizer=l2(1e-4)))
+        self.model.add(Dense(32, activation='tanh', kernel_regularizer=l2(1e-4)))
         self.model.add(BatchNormalization())
         self.model.add(Dense(num_class, activation='softmax'))
         self.model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
@@ -182,7 +182,6 @@ class FaceController:
         self.list_path = []
         self.list_names = []
         self.model = Model()
-        self.new_emb = "new_emb"
         self.unknown_emb = "unknown/unknown_emb"
         self.unknown_photos = "unknown/unknown_photos"
 
@@ -217,7 +216,7 @@ class FaceController:
 
         results = faces.detectMultiScale(img, scaleFactor=2, minNeighbors=5, minSize=(10, 10))
         for (x, y, w, h) in results:
-            cv.imshow('camera', img[y:y + h, x:x + w])
+            # cv.imshow('camera', img[y:y + h, x:x + w])
             cv2.imwrite("photos/photos_photo.jpg", img[y:y + h, x:x + w])
             emb, checker = create_embedding("photos/photos_photo.jpg")
             if checker:
@@ -245,13 +244,13 @@ class FaceController:
 
     def create_enb_new_person(self):
         files = os.listdir(self.unknown_photos)
-        files_emb = os.listdir(self.new_emb)
+        files_emb = os.listdir(self.unknown_emb)
         start_len = len(files_emb)
         i = 0
         for file in files:
             unknown_emb, checker = create_embedding(f"{self.unknown_photos}/{file}")
             if checker:
-                np.save(f"{self.new_emb}/{i + start_len}.npy", unknown_emb)
+                np.save(f"{self.unknown_emb}/{i + start_len}.npy", unknown_emb)
                 i += 1
             else:
                 print(file)
@@ -363,13 +362,15 @@ class FaceController:
 
 
 if __name__ == '__main__':
-    list_path = [("unknown/unknown_emb", 0), ("D:\\metadata\\12002015\\1", 1), ("D:\\metadata\\12002015\\2", 2),
-                 # "D:\\metadata\\12002015\\3",
-                 ("D:\\metadata\\12002015\\4", 4), ("D:\\metadata\\12002015\\5", 5), ("D:\\metadata\\12002015\\6", 6),
-                 ("D:\\metadata\\12002015\\7", 7), ("D:\\metadata\\tch\\1", 8), ("D:\\metadata\\12002333\\1", 9)]
-    list_names = ["Неизвестный", "М_1", "М_2", "М_4", "М_5", "Ж_1", "М_6", "Александр Геннадиевич", "Никита Мартон"]
+    list_path = [("unknown_persons", 0), ("D:\\metadata\\12002015\\1", 1), ("D:\\metadata\\12002015\\2", 2),
+                 ("D:\\metadata\\12002015\\3", 3), ("D:\\metadata\\12002015\\4", 4), ("D:\\metadata\\12002015\\5", 5),
+                 ("D:\\metadata\\12002015\\6", 6), ("D:\\metadata\\12002015\\7", 7), ("D:\\metadata\\tch\\1", 8),
+                 ("D:\\metadata\\12002333\\1", 9)]
+    list_names = ["Неизвестный", "М_1", "Свилогузов", "Шатохин", "М_4", "Савченко", "Слапыгина", "М_6",
+                  "Александр Геннадиевич", "Никита Мартон"]
     face_controller = FaceController()
     face_controller.update_list_path(list_path)
     face_controller.update_list_names(list_names)
-    face_controller.use_camera()
-    # face_controller.use_photo(path="test/2.jpg")
+    # face_controller.create_and_train_model()
+    # face_controller.use_camera()
+    face_controller.use_photo(path="test/2.jpg")
