@@ -14,6 +14,8 @@ from keras.src.utils import to_categorical
 from sklearn.preprocessing import LabelEncoder
 from keras.src.layers import BatchNormalization, Dropout
 
+current_script_directory = os.path.dirname(os.path.abspath(__file__))
+
 
 def split_array(arr):
     n = len(arr)
@@ -75,26 +77,26 @@ class User:
 
 class Model:
     def __init__(self):
-        self.pathModel = "model/face_ind_model.keras"
+        self.pathModel = f"{current_script_directory}/model/face_ind_model.keras"
         self.model = None
         self.History = None
 
     def create_model(self, x_train, num_class):
         self.model = Sequential()
         self.model.add(BatchNormalization())
-        self.model.add(Dense(256, input_shape=x_train[0].shape, activation='tanh', kernel_regularizer=l2(1e-4)))
+        self.model.add(Dense(256, input_shape=x_train[0].shape, activation='relu', kernel_regularizer=l2(1e-4)))
         self.model.add(BatchNormalization())
-        self.model.add(Dense(256, activation='tanh', kernel_regularizer=l2(1e-4)))
+        self.model.add(Dense(256, activation='relu', kernel_regularizer=l2(1e-4)))
         self.model.add(BatchNormalization())
-        self.model.add(Dense(128, activation='tanh', kernel_regularizer=l2(1e-4)))
+        self.model.add(Dense(128, activation='relu', kernel_regularizer=l2(1e-4)))
         self.model.add(Dropout(0.2))
-        self.model.add(Dense(64, activation='tanh', kernel_regularizer=l2(1e-4)))
+        self.model.add(Dense(64, activation='relu', kernel_regularizer=l2(1e-4)))
         self.model.add(BatchNormalization())
-        self.model.add(Dense(64, activation='tanh', kernel_regularizer=l2(1e-4)))
+        self.model.add(Dense(64, activation='relu', kernel_regularizer=l2(1e-4)))
         self.model.add(BatchNormalization())
-        self.model.add(Dense(32, activation='tanh', kernel_regularizer=l2(1e-4)))
+        self.model.add(Dense(32, activation='relu', kernel_regularizer=l2(1e-4)))
         self.model.add(BatchNormalization())
-        self.model.add(Dense(32, activation='tanh', kernel_regularizer=l2(1e-4)))
+        self.model.add(Dense(32, activation='relu', kernel_regularizer=l2(1e-4)))
         self.model.add(BatchNormalization())
         self.model.add(Dense(num_class, activation='softmax'))
         self.model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
@@ -182,12 +184,12 @@ class FaceController:
         self.list_path = []
         self.list_names = []
         self.model = Model()
-        self.unknown_emb = "unknown/unknown_emb"
-        self.unknown_photos = "unknown/unknown_photos"
+        self.unknown_emb = f"{current_script_directory}/unknown/unknown_emb"
+        self.unknown_photos = f"{current_script_directory}/unknown/unknown_photos"
 
     def use_camera(self):
         capture = cv.VideoCapture(0)
-        faces = cv.CascadeClassifier('camera/faces.xml')
+        faces = cv.CascadeClassifier(f"{current_script_directory}/camera/faces.xml")
         list_ind = []
         while True:
             ret, img = capture.read()
@@ -195,8 +197,8 @@ class FaceController:
             for (x, y, w, h) in results:
                 cv.rectangle(img, (x, y), (x + w, y + h), (125, 125, 255), thickness=3)
                 cv.imshow('camera', img[y:y + h, x:x + w])
-                cv2.imwrite("camera/camera_photo.jpg", img[y:y + h, x:x + w])
-                emb, checker = create_embedding("camera/camera_photo.jpg")
+                cv2.imwrite(f"{current_script_directory}/camera/camera_photo.jpg", img[y:y + h, x:x + w])
+                emb, checker = create_embedding(f"{current_script_directory}/camera/camera_photo.jpg")
                 if checker:
                     ind = self.model.check_best_model(emb)
                     list_ind.append(ind)
@@ -211,14 +213,14 @@ class FaceController:
         print(f"Это: {self.list_names[mode(list_ind)]}")
 
     def use_photo(self, path):
-        faces = cv.CascadeClassifier('photos/faces.xml')
+        faces = cv.CascadeClassifier(f"{current_script_directory}/photos/faces.xml")
         img = cv.imread(path)
 
         results = faces.detectMultiScale(img, scaleFactor=2, minNeighbors=5, minSize=(10, 10))
         for (x, y, w, h) in results:
             # cv.imshow('camera', img[y:y + h, x:x + w])
-            cv2.imwrite("photos/photos_photo.jpg", img[y:y + h, x:x + w])
-            emb, checker = create_embedding("photos/photos_photo.jpg")
+            cv2.imwrite(f"{current_script_directory}/photos/photos_photo.jpg", img[y:y + h, x:x + w])
+            emb, checker = create_embedding(f"{current_script_directory}/photos/photos_photo.jpg")
             if checker:
                 ind = self.model.check_best_model(emb)
                 print(f"Это: {self.list_names[ind]}")
@@ -362,18 +364,23 @@ class FaceController:
 
 
 if __name__ == '__main__':
-    list_path = [("unknown_persons", 0), ("D:\\metadata\\12002015\\1", 1), ("D:\\metadata\\12002015\\2", 2),
-                 ("D:\\metadata\\12002015\\3", 3), ("D:\\metadata\\12002015\\4", 4), ("D:\\metadata\\12002015\\5", 5),
-                 ("D:\\metadata\\12002015\\6", 6), ("D:\\metadata\\12002015\\7", 7), ("D:\\metadata\\tch\\1", 8),
-                 ("D:\\metadata\\12002333\\1", 9)]
+    list_path = [("unknown_persons", 0), ("metadata/12002015/1", 1), ("metadata/12002015/2", 2),
+                 ("metadata/12002015/3", 3), ("metadata/12002015/4", 4), ("metadata/12002015/5", 5),
+                 ("metadata/12002015/6", 6), ("metadata/12002015/7", 7), ("metadata/tch/1", 8),
+                 ("metadata/12002333/1", 9)]
     list_names = ["Неизвестный", "М_1", "Свилогузов", "Шатохин", "М_4", "Савченко", "Слапыгина", "М_6",
                   "Александр Геннадиевич", "Никита Мартон"]
     face_controller = FaceController()
     face_controller.update_list_path(list_path)
     face_controller.update_list_names(list_names)
     # face_controller.create_and_train_model()
-    print("Включаю камеру")
-    face_controller.use_camera()
-    print("Введи что-нибудь, а потом нажми enter")
+
+    choose = input("Включить камеру - 1; Распознавать фото - 2: ")
+    if choose == "1":
+        print("Включаю камеру")
+        face_controller.use_camera()
+    else:
+        print("Распознаю фото")
+        face_controller.use_photo(path=f"{current_script_directory}/test/2.jpg")
+    print("Введите что-нибудь, а потом нажми enter")
     input()
-    # face_controller.use_photo(path="test/2.jpg")
