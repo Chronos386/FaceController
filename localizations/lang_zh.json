@@ -1,0 +1,22 @@
+{
+    "room_name": "教室 {room}，第 {building} 号教学楼",
+    "select_action": "选择一个操作：\n标记出勤或\n查看本周课程表",
+    "mark_attendance": "标记出勤",
+    "view_schedule": "查看课程表",
+    "loading": "加载中...",
+    "success": "成功",
+    "group": "组",
+    "student": "学生",
+    "subject": "科目",
+    "is_correct": "一切正确吗？",
+    "error": "错误",
+    "code": "代码",
+    "message": "信息",
+    "retry": "重试",
+    "cancel": "取消",
+    "confirm": "确认",
+    "no_classes": "本周没有课程",
+    "schedule_group": "课程表，组 {group}",
+    "schedule": "课程表",
+    "date_weekday": "{date}, {weekday}"
+}

@@ -1,0 +1,22 @@
+{
+    "room_name": "Salle {room}, Bâtiment n°{building}",
+    "select_action": "Choisissez une action :\nmarquer la présence ou\nvoir le programme de la semaine en cours",
+    "mark_attendance": "Marquer la présence",
+    "view_schedule": "Voir le programme",
+    "loading": "Chargement...",
+    "success": "Succès",
+    "group": "Groupe",
+    "student": "Étudiant",
+    "subject": "Sujet",
+    "is_correct": "Tout est correct ?",
+    "error": "Erreur",
+    "code": "Code",
+    "message": "Message",
+    "retry": "Réessayer",
+    "cancel": "Annuler",
+    "confirm": "Confirmer",
+    "no_classes": "Pas de cours cette semaine",
+    "schedule_group": "Programme, groupe {group}",
+    "schedule": "Programme",
+    "date_weekday": "{date}, {weekday}"
+}

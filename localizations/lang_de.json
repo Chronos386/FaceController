@@ -1,0 +1,22 @@
+{
+    "room_name": "Raum {room}, Gebäude Nr. {building}",
+    "select_action": "Wählen Sie eine Aktion:\nAnwesenheit markieren oder\nden Zeitplan für die aktuelle Woche anzeigen",
+    "mark_attendance": "Anwesenheit markieren",
+    "view_schedule": "Zeitplan anzeigen",
+    "loading": "Laden...",
+    "success": "Erfolg",
+    "group": "Gruppe",
+    "student": "Student",
+    "subject": "Fach",
+    "is_correct": "Ist alles korrekt?",
+    "error": "Fehler",
+    "code": "Code",
+    "message": "Nachricht",
+    "retry": "Erneut versuchen",
+    "cancel": "Abbrechen",
+    "confirm": "Bestätigen",
+    "no_classes": "Diese Woche keine Kurse",
+    "schedule_group": "Zeitplan, Gruppe {group}",
+    "schedule": "Zeitplan",
+    "date_weekday": "{date}, {weekday}"
+}

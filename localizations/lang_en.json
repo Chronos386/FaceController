@@ -1,0 +1,22 @@
+{
+    "room_name": "Room {room}, Building №{building}",
+    "select_action": "Choose an action:\nmark attendance or\nview the schedule for the current week",
+    "mark_attendance": "Mark Attendance",
+    "view_schedule": "View Schedule",
+    "loading": "Loading...",
+    "success": "Success",
+    "group": "Group",
+    "student": "Student",
+    "subject": "Subject",
+    "is_correct": "Is everything correct?",
+    "error": "Error",
+    "code": "Code",
+    "message": "Message",
+    "retry": "Retry",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "no_classes": "No classes this week",
+    "schedule_group": "Schedule, group {group}",
+    "schedule": "Schedule",
+    "date_weekday": "{date}, {weekday}"
+}

@@ -1,0 +1,22 @@
+{
+    "room_name": "教室 {room}、第 {building} 号校舎",
+    "select_action": "アクションを選択してください：\n出席を記録するか\n今週のスケジュールを表示する",
+    "mark_attendance": "出席を記録する",
+    "view_schedule": "スケジュールを表示",
+    "loading": "読み込み中...",
+    "success": "成功",
+    "group": "グループ",
+    "student": "学生",
+    "subject": "科目",
+    "is_correct": "すべて正しいですか？",
+    "error": "エラー",
+    "code": "コード",
+    "message": "メッセージ",
+    "retry": "再試行",
+    "cancel": "キャンセル",
+    "confirm": "確認",
+    "no_classes": "今週の授業はありません",
+    "schedule_group": "スケジュール、グループ {group}",
+    "schedule": "スケジュール",
+    "date_weekday": "{date}、{weekday}"
+}
